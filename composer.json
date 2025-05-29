@@ -1,5 +1,5 @@
 {
-  "name": "CICD",
+  "name": "sinmokkk/cicd",
   "require": {},
   "require-dev": {
     "phpstan/phpstan": "^1.10"
