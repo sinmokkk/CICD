@@ -63,7 +63,7 @@ jobs:
 
       - name: Start web app (replace with your app container or command)
         run: |
-          docker run -d -p 8080:8080 my-app-image  
+          docker run -d -p 8080:80 -v "$PWD":/var/www/html php:8.2-apache
           sleep 30  
 
       - name: Run ZAP Baseline Scan
