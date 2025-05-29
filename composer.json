@@ -3,11 +3,6 @@
   "description": "A vulnerable PHP demo app for Snyk and SonarCloud analysis",
   "license": "proprietary",
   "require": {},
-  "autoload": {
-    "classmap": [
-        "/"
-    ]
-  },
   "require-dev": {
     "phpstan/phpstan": "^1.10",
     "phpunit/phpunit": "^12"
