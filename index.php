@@ -5,13 +5,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $db = new PDO('sqlite:users.db');
+    $db = new SQLite3('users.db');
 
     // SQL Injection
     $query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
     $result = $db->query($query);
 
-    if ($result && $result->fetch()) {
+    if ($result && $result->fetchArray()) {
         echo "✅ 登入成功";
     } else {
         echo "❌ 登入失敗";
