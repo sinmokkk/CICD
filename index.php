@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "❌ 登入失敗";
     }
 } else {
-    // form
+    // <form>
     echo '<form method="POST">
             帳號: <input type="text" name="username"><br>
             密碼: <input type="password" name="password"><br>

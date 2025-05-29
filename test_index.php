@@ -27,3 +27,5 @@ function testLogin($username, $password) {
 // 測試案例
 testLogin("' OR '1'='1", "' OR '1'='1");
 testLogin("admin' --", '');
+
+?>
