@@ -60,6 +60,19 @@ jobs:
     steps:
       - name: ZAP Scan
         uses: zaproxy/action-full-scan@v0.12.0
-        with:
-          target: 'https://www.zaproxy.org/'
+      - name: Start web app (replace with your app container or command)
+        run: |
+          docker run -d -p 8080:8080 my-app-image  # 請根據你的應用調整
+          sleep 30  # 等待應用啟動完成
 
+      - name: Run ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.9.0
+        with:
+          target: 'http://localhost:8080'
+          cmd_options: '-r zap_report.html'
+
+      - name: Upload ZAP Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-report
+          path: zap_report.html
