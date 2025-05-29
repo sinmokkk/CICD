@@ -26,6 +26,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: composer install
+
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/php@master
         continue-on-error: true
