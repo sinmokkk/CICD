@@ -1,18 +1,28 @@
-name: PHP Composer
+name: CI
 
 on: [push]
 
+permissions:
+  contents: read
+  security-events: write
+  issues: write
+
 jobs:
   build:
+    name: Build
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Validate composer.json
         run: composer validate --strict
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
-  snyk:
+  snyk-to-sca:
+    name: Snyk To SCA
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,21 +41,24 @@ jobs:
         with:
           sarif_file: snyk.sarif
 
-  sonarqube:
-    name: SonarQube
+  sonarqube-to-sast:
+    name: SonarQube To SAST
+
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+  
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  zap_scan: 
-    name: OWASP ZAP Scan
+  zap_scan-to-dast: 
+    name: OWASP ZAP to DAST
     needs: build
+  
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -55,25 +68,29 @@ jobs:
           docker run -d -p 8080:80 -v .:/var/www/html php:8.2-apache
           sleep 20  # 等待應用啟動完成
 
-      - name: Run ZAP Baseline Scan
+      - name: ZAP Scan
         uses: zaproxy/action-full-scan@v0.12.0
         with:
           target: 'http://localhost:8080'
-          artifact_name: owasp-zap-report.html
+          artifact_name: owasp-zap-report
           cmd_options: '-a'
 
       - name: Upload ZAP Report
         uses: actions/upload-artifact@v4
         with:
           name: zap-report
-          path: owasp-zap-report.html
+          path: owasp-zap-report
 
   test:
+    name: Run Unit Tests
+
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: php-actions/composer@v6
-      - run: vendor/bin/phpunit tests --log-events-text phpunit-results.txt
+
+      - name: Run phpunit
+        run: vendor/bin/phpunit tests --log-events-text phpunit-results.txt
         continue-on-error: true
 
       - name: Upload TEST Report
