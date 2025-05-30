@@ -55,7 +55,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  zap_scan-to-dast: 
+  zap-to-dast: 
     name: OWASP ZAP to DAST
     needs: build
   
@@ -66,7 +66,7 @@ jobs:
       - name: Start web app
         run: |
           docker run -d -p 8080:80 -v .:/var/www/html php:8.2-apache
-          sleep 20  # 等待應用啟動完成
+          sleep: 10  # 等待應用啟動完成
 
       - name: ZAP Scan
         uses: zaproxy/action-full-scan@v0.12.0
@@ -74,13 +74,7 @@ jobs:
           target: 'http://localhost:8080'
           artifact_name: owasp-zap-report
           cmd_options: '-a'
-
-      - name: Upload ZAP Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: zap-report
-          path: owasp-zap-report
-
+  
   test:
     name: Run Unit Tests
 
