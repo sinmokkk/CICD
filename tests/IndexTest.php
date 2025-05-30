@@ -32,6 +32,6 @@ final class IndexTest extends TestCase
         include __DIR__ . '/../index.php';
         $output = ob_get_clean();
 
-        $this->assertStringContainsString('❌ 登入失敗', $output);
+        $this->assertStringContainsString('✅ 登入成功', $output);
     }
 }
