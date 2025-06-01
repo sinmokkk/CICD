@@ -8,8 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $db = new SQLite3('users.db');
 
     // SQL Injection
-    $query = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
-    $result = $db->query($query);
+    $result = $db->query(query: "SELECT * FROM users WHERE username = '$username' AND password = '$password'");
 
     if ($result && $result->fetchArray()) {
         echo "✅ 登入成功";
